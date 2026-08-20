@@ -4,7 +4,9 @@
 set -e
 H=/data/.openclaw
 mkdir -p "$H"
-
+echo "[telegram-fix] clearing stuck ingress spool"
+rm -rf "$H/telegram/ingress-spool-default" 2>/dev/null || true
+mkdir -p "$H/telegram/ingress-spool-default"
 # 1) Seed openclaw.json + workspace lần đầu (KHÔNG đè để giữ trí nhớ Mây học trên cloud)
 if [ ! -f "$H/openclaw.json" ]; then
   cp /app/seed/openclaw.json "$H/openclaw.json"
