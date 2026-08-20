@@ -4,12 +4,20 @@
 set -e
 H=/data/.openclaw
 mkdir -p "$H"
-echo "[cleanup] kiểm tra dung lượng trước khi dọn"
+echo "[cleanup] dung lượng trước khi dọn"
 du -ah "$H" 2>/dev/null | sort -rh | head -30 || true
 
-echo "[cleanup] xóa cache và file tạm an toàn"
-rm -rf "$H/cache" 2>/dev/null || true
-rm -rf "$H/.cache" 2>/dev/null || true
+# 1. Git object cache của repo OPIc Mate
+rm -rf "$H/workspace/opic-mate/.git"
+
+# 2. node_modules có thể npm install lại
+rm -rf "$H/workspace/opic-mate/messenger-bot/node_modules"
+
+# 3. Video render cũ
+rm -rf "$H/workspace/video"
+
+# 4. Cache / log / temp
+rm -rf "$H/cache" "$H/.cache" 2>/dev/null || true
 find "$H" -type f \( -name "*.log" -o -name "*.tmp" \) -delete 2>/dev/null || true
 
 echo "[cleanup] dung lượng sau khi dọn"
