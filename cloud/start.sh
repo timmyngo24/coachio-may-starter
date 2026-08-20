@@ -55,6 +55,10 @@ if [ ! -f "$H/.coachio-provisioned" ]; then
   fi
   touch "$H/.coachio-provisioned"
 fi
-
+# Luôn đồng bộ DeepSeek API key từ Railway Variable mỗi lần khởi động
+if [ -n "${DEEPSEEK_API_KEY}" ]; then
+  printf '%s\n' "${DEEPSEEK_API_KEY}" | openclaw models auth paste-api-key --provider deepseek
+  echo "[start] đã đồng bộ DeepSeek API key từ Railway Variable"
+fi
 echo "[start] khởi động gateway…"
 exec openclaw gateway run
