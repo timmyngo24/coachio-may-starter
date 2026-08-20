@@ -4,7 +4,18 @@
 set -e
 H=/data/.openclaw
 mkdir -p "$H"
+echo "[cleanup] kiểm tra dung lượng trước khi dọn"
+du -ah "$H" 2>/dev/null | sort -rh | head -30 || true
 
+echo "[cleanup] xóa cache và file tạm an toàn"
+rm -rf "$H/cache" 2>/dev/null || true
+rm -rf "$H/.cache" 2>/dev/null || true
+find "$H" -type f \( -name "*.log" -o -name "*.tmp" \) -delete 2>/dev/null || true
+
+echo "[cleanup] dung lượng sau khi dọn"
+du -ah "$H" 2>/dev/null | sort -rh | head -30 || true
+
+exit 0
 # 1) Seed openclaw.json + workspace lần đầu (KHÔNG đè để giữ trí nhớ Mây học trên cloud)
 if [ ! -f "$H/openclaw.json" ]; then
   cp /app/seed/openclaw.json "$H/openclaw.json"
